@@ -18,10 +18,10 @@
 }
 
 .product-image {
-  width: 80%;
-  height: 80%;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  transition: transform var(--transition-slow);
+  transition: transform var(--transition-slow), filter var(--transition-fast);
 }
 
 .add-to-cart-btn {
@@ -44,6 +44,7 @@
 
 .product-card:hover .product-image {
   transform: scale(1.08);
+  filter: brightness(0.85); /* Oscurece la foto para resaltar el botón de carrito */
 }
 
 .product-card:hover .add-to-cart-btn {

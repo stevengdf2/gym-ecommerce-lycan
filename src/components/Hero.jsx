@@ -16,7 +16,10 @@ export default function Hero() {
       </div>
       
       <div className="hero-content container animate-fade-up">
-        <h1 className="hero-title">EQUIPAMIENTO DE<br/>ALTO RENDIMIENTO</h1>
+        <h1 className="hero-title">
+          <span className="title-line title-line-1">EQUIPAMIENTO DE</span><br/>
+          <span className="title-line title-line-2">ALTO RENDIMIENTO</span>
+        </h1>
         <p className="hero-subtitle">Arma tu espacio de entrenamiento con calidad profesional.</p>
         <Link to="/tienda" className="btn-primary" style={{ marginTop: '32px' }}>
           Explorar Catálogo
