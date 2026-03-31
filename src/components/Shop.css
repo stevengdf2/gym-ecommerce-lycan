@@ -1,0 +1,71 @@
+.tabs-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 48px;
+}
+
+.tab-item {
+  padding: 8px 24px;
+  border: 1px solid var(--color-gray);
+  border-radius: 40px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: var(--color-black);
+  transition: all var(--transition-fast);
+}
+
+.tab-item:hover {
+  border-color: var(--color-black);
+}
+
+.tab-item.active {
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border-color: var(--color-black);
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px 24px;
+}
+
+/* Asimetría sutil subiendo los productos pares en desktop */
+@media (min-width: 1024px) {
+  .products-grid .product-card:nth-child(even) {
+    transform: translateY(30px);
+  }
+  
+  .products-grid .product-card:nth-child(even):hover {
+    transform: translateY(30px) scale(1.02);
+  }
+}
+
+@media (max-width: 1024px) {
+  .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .tabs-container {
+    gap: 8px;
+    margin-bottom: 32px;
+  }
+  .tab-item {
+    font-size: 0.85rem;
+    padding: 6px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .products-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
