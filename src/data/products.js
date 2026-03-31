@@ -4,7 +4,7 @@ export const products = [
     name: "Mancuernas Hexagonales 20kg",
     category: "Equipamiento",
     price: 89.99,
-    image: "https://images.unsplash.com/photo-1638202993928-7267aad84c31?q=80&w=600&auto=format&fit=crop",
+    image: "/images/mancuernas_20kg_1774944908880.png",
     description: "Par de mancuernas hexagonales de 20kg recubiertas de goma virgen de alta densidad. Su diseño evita que rueden sobre la superficie, brindando máxima seguridad. El mango cromado ergonómico garantiza un agarre antideslizante superior durante los levantamientos intensos.",
     features: [
       "Recubrimiento anti-impacto que protege el suelo",
@@ -18,7 +18,7 @@ export const products = [
     name: "Ligas de Resistencia Pro",
     category: "Equipamiento",
     price: 24.50,
-    image: "https://images.unsplash.com/photo-1598266662867-0cbf7fc3c03b?q=80&w=600&auto=format&fit=crop",
+    image: "/images/ligas_resistencia_1774944926595.png",
     description: "Juego completo de 5 ligas tubulares de látex 100% natural, cada una con un nivel diferente de tensión (de 10 a 50 libras). Incluye manerales acolchados, correas para los tobillos y un anclaje de puerta ultra resistente. Perfectas para hipertrofia en casa o terapia de recuperación deportiva corporativa.",
     features: [
       "Látex malayo de máxima durabilidad",
@@ -32,7 +32,7 @@ export const products = [
     name: "Proteína Whey Isolate 100%",
     category: "Suplementos",
     price: 65.00,
-    image: "https://images.unsplash.com/photo-1593095948071-474c5cc2989d?q=80&w=600&auto=format&fit=crop",
+    image: "/images/proteina_whey_1774944941775.png",
     description: "La joya de la corona del rendimiento. 25 gramos exactos de proteína aislada de suero asimilable por cada scoop. Filtrada en frío para eliminar carbohidratos, grasas y lactosa, asegurando una recuperación muscular libre de inflamaciones. Sabor a vainilla volcánica.",
     features: [
       "Cero azúcar añadido, apta para dieta Keto",
@@ -46,7 +46,7 @@ export const products = [
     name: "Creatina Monohidratada 500g",
     category: "Suplementos",
     price: 35.00,
-    image: "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=600&auto=format&fit=crop",
+    image: "/images/creatina_polvo_1774944957509.png",
     description: "Fórmula patentada pura y sin sabor, micronizada a 200 mallas para disolverse al instante sin dejar grumos de arena. Incrementa drásticamente los niveles de fosfocreatina en tu organismo, disparando tu fuerza explosiva, resistencia general y volumen hídrico celular.",
     features: [
       "Micronizado ultra-fino de grado farmacéutico",
@@ -60,7 +60,7 @@ export const products = [
     name: "Pre-Entreno Explosivo",
     category: "Suplementos",
     price: 42.99,
-    image: "https://images.unsplash.com/photo-1557451314-cfdcba2ee776?q=80&w=600&auto=format&fit=crop",
+    image: "/images/pre_entreno_1774944973250.png",
     description: "Diseñado para los días que no tienes ganas. Un cocktail vascular sin precedentes que mezcla cafeína anhidra, Beta-Alanina para retrasar la fatiga y Citrulina para un bombeo en el pecho destructivo. Advertencia: Produce una fuerte energía tunnel-vision enfocada.",
     features: [
       "Bombeo y vascularidad intensificada",
@@ -74,7 +74,7 @@ export const products = [
     name: "Camiseta Compresión Élite",
     category: "Indumentaria",
     price: 29.90,
-    image: "https://images.unsplash.com/photo-1581655353564-df123a1eb820?q=80&w=600&auto=format&fit=crop",
+    image: "/images/camiseta_compresion_1774944992827.png",
     description: "Textil inteligente de secado rápido que moldea y adhiere a tu torso para controlar la temperatura temporal corporal durante los sprints o levantamientos severos. Sus costuras planas antirozaduras y la tecnología anti-olor la hacen obligatoria en cualquier closet deportivo.",
     features: [
       "Material Dry-Fit ultra elástico (4 vías)",
@@ -88,7 +88,7 @@ export const products = [
     name: "Faja Lumbar de Levantamiento",
     category: "Accesorios",
     price: 39.00,
-    image: "https://images.unsplash.com/photo-1584863265045-eee30a61d15c?q=80&w=600&auto=format&fit=crop",
+    image: "/images/faja_lumbar_1774945007400.png",
     description: "Construida en cuero genuino de 10mm de grosor y forrada para no lacerar. Diseñada ex profeso para crear una extrema presión intraabdominal durante las sentadillas y pesos muertos pesados. Esencial para proteger tu espina dorsal en cada repetición al límite.",
     features: [
       "Cuero industrial de doble costura gruesa",
@@ -102,7 +102,7 @@ export const products = [
     name: "Termo Shaker Acero Inox",
     category: "Accesorios",
     price: 19.50,
-    image: "https://images.unsplash.com/photo-1622618991746-fe6004db3a47?q=80&w=600&auto=format&fit=crop",
+    image: "/images/termo_shaker_1774945024959.png",
     description: "Olvídate de los batidos de proteína con olor a plástico podrido. Este Termo de acero inoxidable aisla el frío hasta por 24 horas y tiene un compartimento enroscable extra en la parte inferior para llevar tus pastillas o tu polvo para el post-entreno.",
     features: [
       "Acero inoxidable 304 anti-olores",

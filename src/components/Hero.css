@@ -31,8 +31,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: var(--color-black);
-  opacity: 0.5; /* Overlay oscuro sutil (el user pidio 30%, pondremos 0.5 para contraste de letras blancas) */
+  background: linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.9) 100%);
 }
 
 .hero-content {
@@ -52,49 +51,49 @@
 .title-line {
   display: block;
   opacity: 0;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.9);
 }
 
 .title-line-1 {
-  animation: cinematicFadeIn 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation: slideFadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   animation-delay: 0.1s;
 }
 
 .title-line-2 {
-  color: transparent;
-  -webkit-text-stroke: 2px var(--color-white);
-  animation: cinematicFadeIn 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards, aggressiveGlow 3s ease-in-out forwards infinite alternate;
+  color: var(--color-red);
+  display: inline-block;
+  animation: slideFadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards, heartBeatGlow 3s ease-in-out infinite alternate;
   animation-delay: 0.4s;
 }
 
 .hero-subtitle {
-  font-size: 1.4rem;
-  font-weight: 300;
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: var(--color-white);
+  text-shadow: 0 4px 15px rgba(0,0,0,1);
   opacity: 0;
-  animation: cinematicFadeIn 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  margin-top: 24px;
+  animation: slideFadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   animation-delay: 0.8s;
-  color: #ddd;
 }
 
-@keyframes cinematicFadeIn {
-  0% { transform: translateY(40px) scale(0.95); opacity: 0; filter: blur(15px); }
-  100% { transform: translateY(0) scale(1); opacity: 1; filter: blur(0px); }
+@keyframes slideFadeInUp {
+  0% { transform: translateY(40px); opacity: 0; letter-spacing: -2px; }
+  100% { transform: translateY(0); opacity: 1; letter-spacing: 0px; }
 }
 
-@keyframes aggressiveGlow {
+@keyframes heartBeatGlow {
   0% { 
-    color: transparent; 
-    text-shadow: 0 0 0px transparent;
-    -webkit-text-stroke: 2px var(--color-white);
+    text-shadow: 0 4px 20px rgba(0,0,0,0.9), 0 0 10px rgba(217, 4, 41, 0.4);
+    transform: scale(1);
   }
   50% { 
-    color: var(--color-red); 
-    text-shadow: 0 0 40px rgba(217, 4, 41, 0.8);
-    -webkit-text-stroke: 0px transparent;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.9), 0 0 35px rgba(217, 4, 41, 0.9);
+    transform: scale(1.02);
   }
   100% {
-    color: transparent; 
-    text-shadow: 0 0 0px transparent;
-    -webkit-text-stroke: 2px var(--color-white);
+    text-shadow: 0 4px 20px rgba(0,0,0,0.9), 0 0 10px rgba(217, 4, 41, 0.4);
+    transform: scale(1);
   }
 }
 
