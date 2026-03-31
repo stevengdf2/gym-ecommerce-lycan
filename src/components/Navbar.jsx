@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ShoppingBag } from 'lucide-react';
+import { useCart } from '../context/CartContext';
 import './Navbar.css';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
+  const { getCartCount } = useCart();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,9 +36,28 @@ export default function Navbar() {
         </ul>
 
         <div className="navbar-actions">
-          <button className="cart-btn" aria-label="Carrito">
+          <Link to="/carrito" className="cart-btn" aria-label="Ver Carrito" style={{ position: 'relative' }}>
             <ShoppingBag size={24} />
-          </button>
+            {getCartCount() > 0 && (
+              <span className="cart-badge" style={{
+                position: 'absolute',
+                top: '-5px',
+                right: '-8px',
+                backgroundColor: 'var(--color-red)',
+                color: 'white',
+                fontSize: '0.7rem',
+                fontWeight: 'bold',
+                width: '18px',
+                height: '18px',
+                borderRadius: '50%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}>
+                {getCartCount()}
+              </span>
+            )}
+          </Link>
           <button 
             className="menu-btn" 
             onClick={() => setMenuOpen(!menuOpen)}

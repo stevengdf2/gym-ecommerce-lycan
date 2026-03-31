@@ -19,7 +19,7 @@ export default function ContactPage() {
               <Phone className="text-red" size={32} />
               <div>
                 <h4 style={{ fontSize: '1.2rem', fontFamily: 'var(--font-heading)' }}>Teléfono (WhatsApp)</h4>
-                <p style={{ color: 'var(--color-gray)' }}>+593 99 999 9999</p>
+                <p style={{ color: 'var(--color-gray)' }}>+593 96 336 6512</p>
               </div>
             </div>
             

@@ -1,7 +1,10 @@
 import { ShoppingCart } from 'lucide-react';
+import { useCart } from '../context/CartContext';
 import './ProductCard.css';
 
 export default function ProductCard({ product }) {
+  const { addToCart } = useCart();
+
   return (
     <div className="product-card">
       <div className="product-image-container">
@@ -11,7 +14,11 @@ export default function ProductCard({ product }) {
           className="product-image" 
           loading="lazy" 
         />
-        <button className="add-to-cart-btn" aria-label={`Añadir ${product.name} al carrito`}>
+        <button 
+          className="add-to-cart-btn" 
+          aria-label={`Añadir ${product.name} al carrito`}
+          onClick={() => addToCart(product)}
+        >
           <ShoppingCart size={20} />
           <span>Añadir al carrito</span>
         </button>

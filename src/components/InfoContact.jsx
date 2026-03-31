@@ -14,7 +14,7 @@ export default function InfoContact() {
           <div className="contact-item">
             <Phone className="contact-icon text-red" size={32} />
             <h4>Llámanos</h4>
-            <a href="tel:+593999999999" className="contact-link">+593 99 999 9999</a>
+            <a href="tel:+593963366512" className="contact-link">+593 96 336 6512</a>
           </div>
           
           <div className="contact-item">
