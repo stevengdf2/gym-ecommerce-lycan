@@ -1,4 +1,5 @@
 import { ChevronDown } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import './Hero.css';
 
 export default function Hero() {
@@ -17,14 +18,14 @@ export default function Hero() {
       <div className="hero-content container animate-fade-up">
         <h1 className="hero-title">EQUIPAMIENTO DE<br/>ALTO RENDIMIENTO</h1>
         <p className="hero-subtitle">Arma tu espacio de entrenamiento con calidad profesional.</p>
-        <a href="#tienda" className="btn-primary" style={{ marginTop: '32px' }}>
+        <Link to="/tienda" className="btn-primary" style={{ marginTop: '32px' }}>
           Explorar Catálogo
-        </a>
+        </Link>
       </div>
 
-      <a href="#tienda" className="hero-scroll-indicator" aria-label="Deslizar hacia abajo">
+      <Link to="/tienda" className="hero-scroll-indicator" aria-label="Explorar Catálogo">
         <ChevronDown size={32} />
-      </a>
+      </Link>
     </section>
   );
 }
