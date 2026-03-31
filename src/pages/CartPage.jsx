@@ -1,8 +1,10 @@
 import { Trash2 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { Link } from 'react-router-dom';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 
 export default function CartPage() {
+  useDocumentTitle('Tu Carrito de Compras | GymPro');
   const { cartItems, removeFromCart, updateQuantity, getCartTotal, clearCart } = useCart();
   const waNumber = "593963366512";
 

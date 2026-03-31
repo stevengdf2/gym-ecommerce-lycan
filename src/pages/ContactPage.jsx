@@ -1,7 +1,9 @@
 import { Phone, MapPin, Mail, Clock } from 'lucide-react';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import '../components/InfoContact.css'; // Podemos reusar parte del grid original si es necesario
 
 export default function ContactPage() {
+  useDocumentTitle('Contáctanos | GymPro Ecuador');
   return (
     <div style={{ paddingTop: '120px', paddingBottom: '80px', backgroundColor: 'var(--color-black)', minHeight: '80vh', color: 'var(--color-white)' }}>
       <div className="container">
