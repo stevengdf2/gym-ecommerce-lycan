@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { CheckCircle2, PackagePlus, Lock, Edit, Trash2, X } from 'lucide-react';
+import { Lock, LogIn, Edit, Trash2, X, PackagePlus, CheckCircle2 } from 'lucide-react';
 import { doc, setDoc, deleteDoc } from 'firebase/firestore';
-import { db } from '../firebase/config';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { db, auth } from '../firebase/config';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { useProducts } from '../context/ProductContext';
 import { products as localProducts } from '../data/products';
@@ -9,9 +10,11 @@ import { products as localProducts } from '../data/products';
 export default function AdminPage() {
   useDocumentTitle("Panel de Control | GymPro");
   
-  // Seguridad simple de acceso administrativo
+  // Seguridad de Bóveda: Google Auth
   const [isLogged, setIsLogged] = useState(false);
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   
   // Contexto de la tienda para mostrar el inventario vivo abajo
   const { products } = useProducts();
@@ -28,12 +31,16 @@ export default function AdminPage() {
   const [isUploading, setIsUploading] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (password === 'administrador') {
+    setIsLoggingIn(true);
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
       setIsLogged(true);
-    } else {
-      alert("Contraseña incorrecta. Contacte a Antigravity o sistemas.");
+    } catch (error) {
+      alert("Acceso Denegado ❌\nTu correo o contraseña no coincide con los permisos maestros de la base de datos.");
+    } finally {
+      setIsLoggingIn(false);
     }
   };
 
@@ -118,16 +125,30 @@ export default function AdminPage() {
         <form onSubmit={handleLogin} style={{ backgroundColor: '#fff', padding: '40px', borderRadius: '8px', boxShadow: '0 4px 15px rgba(0,0,0,0.1)', textAlign: 'center' }}>
           <Lock size={48} color="var(--color-red)" style={{ marginBottom: '16px' }} />
           <h2 style={{ fontFamily: 'var(--font-heading)', marginBottom: '8px' }}>Área de Control</h2>
-          <p style={{ color: 'var(--color-gray)', marginBottom: '24px' }}>Solo para Empleados Autorizados.</p>
+          <p style={{ color: 'var(--color-gray)', marginBottom: '24px' }}>Identidad Requerida.</p>
           
           <input 
+            type="email"
+            required
+            placeholder="Correo electrónico maestro"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            style={{ width: '100%', padding: '12px', marginBottom: '16px', border: '1px solid #ccc', borderRadius: '4px' }}
+          />
+
+          <input 
             type="password"
+            required
             placeholder="Introduce la contraseña"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            style={{ width: '100%', padding: '12px', marginBottom: '16px', border: '1px solid #ccc', borderRadius: '4px' }}
+            style={{ width: '100%', padding: '12px', marginBottom: '24px', border: '1px solid #ccc', borderRadius: '4px' }}
           />
-          <button type="submit" className="btn-primary" style={{ width: '100%' }}>Ingresar</button>
+
+          <button disabled={isLoggingIn} type="submit" className="btn-primary" style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
+            <LogIn size={20} />
+            {isLoggingIn ? "Verificando..." : "Autorizar Acceso"}
+          </button>
         </form>
       </div>
     );

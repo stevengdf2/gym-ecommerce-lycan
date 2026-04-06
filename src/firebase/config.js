@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 // Tu configuración secreta oficial (GymPro)
 const firebaseConfig = {
@@ -17,3 +18,6 @@ const app = initializeApp(firebaseConfig);
 
 // Nuestra puerta de conexión a la Base de Datos
 export const db = getFirestore(app);
+
+// Guardián de seguridad Auth
+export const auth = getAuth(app);
