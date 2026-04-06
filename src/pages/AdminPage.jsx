@@ -4,6 +4,7 @@ import { doc, setDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { useProducts } from '../context/ProductContext';
+import { products as localProducts } from '../data/products';
 
 export default function AdminPage() {
   useDocumentTitle("Panel de Control | GymPro");
@@ -98,6 +99,16 @@ export default function AdminPage() {
     const confirmation = window.confirm(`CUIDADO: ¿Estás SEGURO de que deseas borrar "${prodName}" permanentemente de tu tienda?`);
     if (confirmation) {
       deleteDoc(doc(db, 'products', prodId.toString())).catch(e => console.error("Error al borrar optimista", e));
+    }
+  };
+
+  const handleMassiveUpload = () => {
+    const confirm = window.confirm("ATENCIÓN: ¿Seguro que deseas inyectar los 40 productos pre-agregados al servidor de Google?");
+    if (confirm) {
+      localProducts.forEach(item => {
+         setDoc(doc(db, 'products', item.id.toString()), item);
+      });
+      alert("¡Todos los 40 artículos se inyectaron a la bóveda y ya están a la venta! Te sugiero que borres el inventario anterior usando los tachos rojos de abajo.");
     }
   };
 
@@ -201,6 +212,18 @@ export default function AdminPage() {
               {isUploading ? '💾 Procesando...' : (editingId ? '✅ Guardar Modificación' : '🚀 Lanzar Producto a la Tienda')}
             </button>
           </form>
+        </div>
+
+        {/* BOTÓN MÁGICO DE CARGA MASIVA */}
+        <div style={{ backgroundColor: '#fff', padding: '24px', borderRadius: '12px', boxShadow: '0 8px 30px rgba(0,0,0,0.08)', marginBottom: '40px', textAlign: 'center', border: '2px dashed var(--color-red)' }}>
+          <h3 style={{ marginBottom: '12px', fontFamily: 'var(--font-heading)' }}>Sincronización Inteligente de Stock (40 items listos)</h3>
+          <p style={{ color: '#555', marginBottom: '16px', fontSize: '0.9rem' }}>Pulsa aquí si quieres saltarte escribir los 40 artículos a mano. El sistema los insertará de un solo golpe según la lista que diseñé para ti.</p>
+          <button 
+            onClick={handleMassiveUpload}
+            style={{ backgroundColor: '#111', color: 'white', border: 'none', padding: '12px 24px', borderRadius: '6px', fontSize: '1.1rem', cursor: 'pointer', fontFamily: 'var(--font-heading)' }}
+          >
+            ⚡ INYECTAR CATÁLOGO MASIVO A LA NUBE
+          </button>
         </div>
 
         {/* PARTE B: EL INVENTARIO EN VIVO (TABLA) */}
