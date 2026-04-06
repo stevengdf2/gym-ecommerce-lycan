@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { CheckCircle2, PackagePlus, Lock } from 'lucide-react';
-import { collection, doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 
