@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { CheckCircle2, PackagePlus, Lock } from 'lucide-react';
-import { doc, setDoc } from 'firebase/firestore';
+import { CheckCircle2, PackagePlus, Lock, Edit, Trash2, X } from 'lucide-react';
+import { doc, setDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
+import { useProducts } from '../context/ProductContext';
 
 export default function AdminPage() {
   useDocumentTitle("Panel de Control | GymPro");
@@ -11,7 +12,11 @@ export default function AdminPage() {
   const [isLogged, setIsLogged] = useState(false);
   const [password, setPassword] = useState('');
   
-  // Estado del Formulario
+  // Contexto de la tienda para mostrar el inventario vivo abajo
+  const { products } = useProducts();
+
+  // Estados del Formulario (Ahora comparte Modos de Crear y Editar)
+  const [editingId, setEditingId] = useState(null); // null = Modo Lanzar. ID numérico = Modo Editar
   const [name, setName] = useState('');
   const [category, setCategory] = useState('Equipamiento');
   const [price, setPrice] = useState('');
@@ -30,22 +35,27 @@ export default function AdminPage() {
     }
   };
 
-  const handleCreateProduct = async (e) => {
+  const resetForm = () => {
+    setEditingId(null);
+    setName('');
+    setPrice('');
+    setImage('');
+    setDescription('');
+    setFeaturesText('');
+  };
+
+  const handleCreateOrUpdateProduct = async (e) => {
     e.preventDefault();
     setIsUploading(true);
     setSuccessMsg('');
 
     try {
-      // 1. Limpiar datos y comas de precios
-      const cleanPrice = parseFloat(price.replace(',', '.'));
-      
-      // 2. Transforma los "features" separados por "Punto y coma" en items reales (viñetas)
+      const cleanPrice = parseFloat(price.toString().replace(',', '.'));
       const featureArray = featuresText.split(';').map(f => f.trim()).filter(f => f.length > 0);
 
-      // 3. Crear el nuevo Producto
-      const newId = Date.now(); // ID único basado en el momento de creación
-      const newProduct = {
-        id: newId,
+      const finalId = editingId || Date.now(); 
+      const productPayload = {
+        id: finalId,
         name: name,
         category: category,
         price: cleanPrice,
@@ -54,24 +64,36 @@ export default function AdminPage() {
         features: featureArray
       };
 
-      // 4. Inyectar con límite de tiempo (Timeout de 3 segundos) o modo Optimista
-      setDoc(doc(db, 'products', newId.toString()), newProduct).catch(e => console.log(e));
+      // Optimistic UI, envío invisible y rápido a la Nube
+      setDoc(doc(db, 'products', finalId.toString()), productPayload).catch(e => console.log("Silent error", e));
       
-      // 5. Mostrar éxito visual de inmediato (Optimistic UI)
-      setSuccessMsg(`¡${name} fue subido al catálogo mundial con éxito!`);
-      
-      // 6. Limpiar casilleros para poder meter otro producto
-      setName('');
-      setPrice('');
-      setImage('');
-      setDescription('');
-      setFeaturesText('');
+      setSuccessMsg(editingId ? `¡El artículo "${name}" se actualizó con éxito!` : `¡"${name}" fue subido al catálogo mundial!`);
+      resetForm();
       
     } catch (error) {
       console.error(error);
-      alert("Hubo un error subiendo el producto a Google. Revisa tu internet.");
+      alert("Hubo un error armando el producto o con el navegador.");
     } finally {
       setIsUploading(false);
+    }
+  };
+
+  const handleEditClick = (prod) => {
+    setEditingId(prod.id);
+    setName(prod.name);
+    setCategory(prod.category);
+    setPrice(prod.price);
+    setImage(prod.image);
+    setDescription(prod.description);
+    setFeaturesText(prod.features ? prod.features.join('; ') : '');
+    setSuccessMsg('');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleDeleteClick = (prodId, prodName) => {
+    const confirmation = window.confirm(`CUIDADO: ¿Estás SEGURO de que deseas borrar "${prodName}" permanentemente de tu tienda?`);
+    if (confirmation) {
+      deleteDoc(doc(db, 'products', prodId.toString())).catch(e => console.error("Error al borrar optimista", e));
     }
   };
 
@@ -96,15 +118,29 @@ export default function AdminPage() {
     );
   }
 
-  // Si está logeado, mostrar el DASHBOARD
   return (
     <div style={{ paddingTop: '100px', paddingBottom: '80px', minHeight: '80vh', backgroundColor: '#f4f4f4' }}>
       <div className="container" style={{ maxWidth: '800px' }}>
-        <div style={{ backgroundColor: '#fff', padding: '40px', borderRadius: '12px', boxShadow: '0 8px 30px rgba(0,0,0,0.08)' }}>
+        
+        {/* PARTE A: EL FORMULARIO MAESTRO (CREAR / EDITAR) */}
+        <div style={{ backgroundColor: '#fff', padding: '40px', borderRadius: '12px', boxShadow: '0 8px 30px rgba(0,0,0,0.08)', marginBottom: '40px' }}>
           
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '32px', borderBottom: '2px solid #eee', paddingBottom: '16px' }}>
-            <PackagePlus size={36} color="var(--color-red)" />
-            <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '2rem', margin: 0 }}>Publicar Nuevo Artículo</h1>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '32px', borderBottom: '2px solid #eee', paddingBottom: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+               <PackagePlus size={36} color={editingId ? "#10b981" : "var(--color-red)"} />
+               <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '2rem', margin: 0 }}>
+                 {editingId ? "Modificar Artículo" : "Publicar Nuevo Artículo"}
+               </h1>
+            </div>
+            {editingId && (
+              <button 
+                onClick={resetForm}
+                className="btn-outline"
+                style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', fontSize: '0.9rem' }}
+              >
+                <X size={16} /> Cancelar Edición
+              </button>
+            )}
           </div>
 
           {successMsg && (
@@ -114,8 +150,7 @@ export default function AdminPage() {
             </div>
           )}
 
-          <form onSubmit={handleCreateProduct} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            
+          <form onSubmit={handleCreateOrUpdateProduct} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div style={{ display: 'flex', gap: '20px' }}>
               <div style={{ flex: 2 }}>
                 <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '8px' }}>Nombre del Producto *</label>
@@ -155,12 +190,63 @@ export default function AdminPage() {
               <small style={{ color: '#888' }}>Ejemplo: Garantía 2 años; Cobertura nacional; (El sistema creará las bolitas de lista interactiva)</small>
             </div>
 
-            <button disabled={isUploading} type="submit" className="btn-primary" style={{ padding: '16px', fontSize: '1.2rem', marginTop: '16px', opacity: isUploading ? 0.5 : 1 }}>
-              {isUploading ? '💾 Subiendo a la Nube...' : '🚀 Lanzar Producto a la Tienda'}
+            <button disabled={isUploading} type="submit" style={{ padding: '16px', fontSize: '1.2rem', marginTop: '16px', backgroundColor: editingId ? '#10b981' : 'var(--color-red)', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontFamily: 'var(--font-heading)', opacity: isUploading ? 0.5 : 1 }}>
+              {isUploading ? '💾 Procesando...' : (editingId ? '✅ Guardar Modificación' : '🚀 Lanzar Producto a la Tienda')}
             </button>
-
           </form>
         </div>
+
+        {/* PARTE B: EL INVENTARIO EN VIVO (TABLA) */}
+        <div style={{ backgroundColor: '#fff', padding: '40px', borderRadius: '12px', boxShadow: '0 8px 30px rgba(0,0,0,0.08)' }}>
+           <h2 style={{ fontFamily: 'var(--font-heading)', borderBottom: '2px solid #eee', paddingBottom: '16px', marginBottom: '24px' }}>
+             Inventario Operacional ({products.length} Artículos)
+           </h2>
+           
+           {products.length === 0 ? (
+             <p style={{ color: '#888', textAlign: 'center', padding: '20px' }}>No hay productos vivos en la Nube actualmente.</p>
+           ) : (
+             <div style={{ overflowX: 'auto' }}>
+               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                 <thead>
+                   <tr style={{ backgroundColor: '#f8f9fa', borderBottom: '2px solid #dee2e6' }}>
+                     <th style={{ padding: '12px', color: '#495057' }}>Producto</th>
+                     <th style={{ padding: '12px', color: '#495057' }}>Precio</th>
+                     <th style={{ padding: '12px', color: '#495057' }}>Categoría</th>
+                     <th style={{ padding: '12px', color: '#495057', textAlign: 'center' }}>Acciones</th>
+                   </tr>
+                 </thead>
+                 <tbody>
+                   {products.map(prod => (
+                     <tr key={prod.id} style={{ borderBottom: '1px solid #e9ecef', backgroundColor: editingId === prod.id ? '#fcf8e3' : 'white' }}>
+                       <td style={{ padding: '12px', fontWeight: '500' }}>{prod.name}</td>
+                       <td style={{ padding: '12px' }}>${prod.price.toFixed(2)}</td>
+                       <td style={{ padding: '12px' }}>
+                         <span style={{ backgroundColor: '#e9ecef', padding: '4px 8px', borderRadius: '12px', fontSize: '0.85rem' }}>{prod.category}</span>
+                       </td>
+                       <td style={{ padding: '12px', display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                         <button 
+                           onClick={() => handleEditClick(prod)}
+                           title="Editar este producto"
+                           style={{ backgroundColor: '#0ea5e9', color: 'white', border: 'none', padding: '8px', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                         >
+                           <Edit size={16} />
+                         </button>
+                         <button 
+                           onClick={() => handleDeleteClick(prod.id, prod.name)}
+                           title="Borrar de la Nube"
+                           style={{ backgroundColor: '#dc3545', color: 'white', border: 'none', padding: '8px', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                         >
+                           <Trash2 size={16} />
+                         </button>
+                       </td>
+                     </tr>
+                   ))}
+                 </tbody>
+               </table>
+             </div>
+           )}
+        </div>
+
       </div>
     </div>
   );
