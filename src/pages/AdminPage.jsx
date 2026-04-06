@@ -104,7 +104,7 @@ export default function AdminPage() {
           
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '32px', borderBottom: '2px solid #eee', paddingBottom: '16px' }}>
             <PackagePlus size={36} color="var(--color-red)" />
-            <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '2rem', m: 0 }}>Publicar Nuevo Artículo</h1>
+            <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '2rem', margin: 0 }}>Publicar Nuevo Artículo</h1>
           </div>
 
           {successMsg && (

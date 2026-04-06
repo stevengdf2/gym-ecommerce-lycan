@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Search, Loader2 } from 'lucide-react';
 import ProductCard from './ProductCard';
 import { useProducts } from '../context/ProductContext';
