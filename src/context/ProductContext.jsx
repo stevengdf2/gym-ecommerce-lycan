@@ -22,21 +22,18 @@ export function ProductProvider({ children }) {
       // Sembrado automático: Si la nube de Firebase está totalmente vacía 
       // (Porque es la primera vez que la usamos), subimos el catálogo viejo.
       if (snapshot.empty) {
+        // 1. Mostrar contenido inmediatamente (Rescate Visual)
+        setProducts(localProducts);
+        setIsLoading(false);
+
+        // 2. Intentar sembrado en segundo plano (Fire and forget sin await)
         if (!window.hasAttemptedSeed) {
           window.hasAttemptedSeed = true;
-          console.log("Sincronizando el catálogo estático hacia la Nube por primera vez...");
-          try {
-            for (const item of localProducts) {
-              await setDoc(doc(db, 'products', item.id.toString()), item);
-            }
-          } catch (err) {
-            console.error("Firebase rechazó la subida automática. Tu base de datos puede estar protegida en Modo Producción.", err);
-            setProducts(localProducts);
-            setIsLoading(false);
-          }
-        } else {
-          setProducts(localProducts);
-          setIsLoading(false);
+          localProducts.forEach(item => {
+             setDoc(doc(db, 'products', item.id.toString()), item).catch(e => {
+                console.error("Fallo silencioso subiendo a la nube", e);
+             });
+          });
         }
         return; 
       }

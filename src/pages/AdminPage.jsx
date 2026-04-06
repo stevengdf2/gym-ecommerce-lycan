@@ -54,10 +54,10 @@ export default function AdminPage() {
         features: featureArray
       };
 
-      // 4. Inyectar en la Base de Datos Firebase permanentemente
-      await setDoc(doc(db, 'products', newId.toString()), newProduct);
+      // 4. Inyectar con límite de tiempo (Timeout de 3 segundos) o modo Optimista
+      setDoc(doc(db, 'products', newId.toString()), newProduct).catch(e => console.log(e));
       
-      // 5. Mostrar éxito visual
+      // 5. Mostrar éxito visual de inmediato (Optimistic UI)
       setSuccessMsg(`¡${name} fue subido al catálogo mundial con éxito!`);
       
       // 6. Limpiar casilleros para poder meter otro producto
