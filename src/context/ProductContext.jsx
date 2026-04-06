@@ -10,8 +10,8 @@ export function useProducts() {
 }
 
 export function ProductProvider({ children }) {
-  const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [products, setProducts] = useState(localProducts);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     // Abrir un canal de escucha EN VIVO con la Base de datos de Google

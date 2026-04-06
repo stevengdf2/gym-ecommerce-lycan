@@ -1,4 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
+import { useEffect } from 'react';
 import { ArrowLeft, ShoppingCart, CheckCircle2, Loader2 } from 'lucide-react';
 import { useProducts } from '../context/ProductContext';
 import { useCart } from '../context/CartContext';
@@ -10,6 +11,11 @@ export default function ProductDetailsPage() {
   const { products, isLoading } = useProducts();
   const { addToCart } = useCart();
   const { showToast } = useToast();
+  
+  // Subir la cámara automáticamente al tope cuando se abre el artículo
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
   
   const product = products.find(p => p.id === parseInt(id));
   
