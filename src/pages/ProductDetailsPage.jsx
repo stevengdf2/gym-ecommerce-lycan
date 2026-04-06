@@ -1,25 +1,38 @@
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, ShoppingCart, CheckCircle2 } from 'lucide-react';
-import { products } from '../data/products';
+import { ArrowLeft, ShoppingCart, CheckCircle2, Loader2 } from 'lucide-react';
+import { useProducts } from '../context/ProductContext';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 
 export default function ProductDetailsPage() {
   const { id } = useParams();
+  const { products, isLoading } = useProducts();
   const { addToCart } = useCart();
   const { showToast } = useToast();
   
   const product = products.find(p => p.id === parseInt(id));
   
   // SEO title setup
-  useDocumentTitle(product ? `${product.name} | GymPro` : 'Producto no encontrado | GymPro');
+  useDocumentTitle(product ? `${product.name} | GymPro` : 'Cargando | GymPro');
+
+  if (isLoading) {
+    return (
+      <div style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--color-white)' }}>
+         <Loader2 size={64} className="animate-spin" color="var(--color-red)" />
+         <p style={{ marginTop: '16px', fontFamily: 'var(--font-heading)' }}>Sincronizando Base de Datos...</p>
+         <style>{`.animate-spin { animation: spin 1s linear infinite; } @keyframes spin { 100% { transform: rotate(360deg); } }`}</style>
+      </div>
+    );
+  }
 
   if (!product) {
     return (
-      <div style={{ paddingTop: '150px', textAlign: 'center', minHeight: '80vh' }}>
+      <div style={{ paddingTop: '150px', textAlign: 'center', minHeight: '70vh' }}>
         <h2>Producto no encontrado</h2>
-        <Link to="/tienda" className="btn-primary" style={{ marginTop: '24px' }}>Volver al catálogo</Link>
+        <Link to="/tienda" className="btn-primary" style={{ marginTop: '20px', display: 'inline-block' }}>
+          Volver a la Tienda
+        </Link>
       </div>
     );
   }

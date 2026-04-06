@@ -9,12 +9,15 @@ import ShopPage from './pages/ShopPage';
 import ContactPage from './pages/ContactPage';
 import CartPage from './pages/CartPage';
 import ProductDetailsPage from './pages/ProductDetailsPage';
+import AdminPage from './pages/AdminPage';
+import { ProductProvider } from './context/ProductContext';
 
 function App() {
   return (
     <ToastProvider>
-      <CartProvider>
-        <Router>
+      <ProductProvider>
+        <CartProvider>
+          <Router>
           <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
             <Navbar />
             
@@ -25,14 +28,17 @@ function App() {
                 <Route path="/producto/:id" element={<ProductDetailsPage />} />
                 <Route path="/contacto" element={<ContactPage />} />
                 <Route path="/carrito" element={<CartPage />} />
+                {/* Puerta Secreta para los empleados */}
+                <Route path="/admin" element={<AdminPage />} />
               </Routes>
             </main>
 
             <Footer />
             <WhatsAppButton />
           </div>
-        </Router>
-      </CartProvider>
+          </Router>
+        </CartProvider>
+      </ProductProvider>
     </ToastProvider>
   );
 }

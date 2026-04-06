@@ -1,24 +1,25 @@
-import { useState } from 'react';
-import { Search } from 'lucide-react';
+import { Search, Loader2 } from 'lucide-react';
 import ProductCard from './ProductCard';
-import { products } from '../data/products';
+import { useProducts } from '../context/ProductContext';
 import './Shop.css';
 
 const categories = ['Todos', 'Equipamiento', 'Suplementos', 'Indumentaria', 'Accesorios'];
 
 export default function Shop() {
+  const { products, isLoading } = useProducts();
   const [activeTab, setActiveTab] = useState('Todos');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState('relevant'); // relevant, low-to-high, high-to-low
 
   // Primero filtramos la categoría y el texto
-  let displayProducts = products.filter(p => {
+  let filteredProducts = products.filter(p => {
     const matchCategory = activeTab === 'Todos' || p.category === activeTab;
     const matchSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
     return matchCategory && matchSearch;
   });
 
   // Luego ordenamos según la selección
+  let displayProducts = [...filteredProducts];
   if (sortOrder === 'low-to-high') {
     displayProducts.sort((a, b) => a.price - b.price);
   } else if (sortOrder === 'high-to-low') {
@@ -70,16 +71,33 @@ export default function Shop() {
           ))}
         </div>
 
-        {displayProducts.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '64px 0', color: 'var(--color-gray)' }}>
-            <h3>No encontramos productos que coincidan con tu búsqueda.</h3>
+        {isLoading ? (
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '100px 0', color: 'var(--color-red)' }}>
+            <Loader2 size={64} className="animate-spin" style={{ marginBottom: '16px' }} />
+            <p style={{ color: 'var(--color-black)', fontFamily: 'var(--font-heading)' }}>Sincronizando con BD...</p>
+            <style>{`.animate-spin { animation: spin 1s linear infinite; } @keyframes spin { 100% { transform: rotate(360deg); } }`}</style>
           </div>
         ) : (
-          <div className="products-grid">
-            {displayProducts.map(product => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+          <>
+            {displayProducts.length === 0 ? (
+              <div className="no-products-message" style={{ textAlign: 'center', padding: '64px 0', color: 'var(--color-gray)' }}>
+                <p>No se encontraron productos que coincidan con tu búsqueda.</p>
+                <button 
+                  className="btn-outline" 
+                  onClick={() => {setSearchQuery(''); setActiveTab('Todos');}}
+                  style={{ marginTop: '16px', padding: '10px 20px', cursor: 'pointer' }}
+                >
+                  Ver todo el catálogo
+                </button>
+              </div>
+            ) : (
+              <div className="products-grid">
+                {displayProducts.map(product => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
     </section>
