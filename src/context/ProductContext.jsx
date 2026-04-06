@@ -22,12 +22,23 @@ export function ProductProvider({ children }) {
       // Sembrado automático: Si la nube de Firebase está totalmente vacía 
       // (Porque es la primera vez que la usamos), subimos el catálogo viejo.
       if (snapshot.empty) {
-        console.log("Sincronizando el catálogo estático hacia la Nube por primera vez...");
-        for (const item of localProducts) {
-          // Subimos y forzamos a que el documento se llame igual que su ID numérico
-          await setDoc(doc(db, 'products', item.id.toString()), item);
+        if (!window.hasAttemptedSeed) {
+          window.hasAttemptedSeed = true;
+          console.log("Sincronizando el catálogo estático hacia la Nube por primera vez...");
+          try {
+            for (const item of localProducts) {
+              await setDoc(doc(db, 'products', item.id.toString()), item);
+            }
+          } catch (err) {
+            console.error("Firebase rechazó la subida automática. Tu base de datos puede estar protegida en Modo Producción.", err);
+            setProducts(localProducts);
+            setIsLoading(false);
+          }
+        } else {
+          setProducts(localProducts);
+          setIsLoading(false);
         }
-        return; // Firebase detectará esta inyección y volverá a dispararte los datos frescos
+        return; 
       }
 
       // Si sí vienen datos, los convertimos en un arreglo que React pueda leer
