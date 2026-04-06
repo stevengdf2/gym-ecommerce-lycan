@@ -12,9 +12,9 @@ export default function ProductDetailsPage() {
   const { addToCart } = useCart();
   const { showToast } = useToast();
   
-  // Subir la cámara automáticamente al tope cuando se abre el artículo
+  // Salto de cámara instantáneo en lugar de deslizamiento
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: 'instant' });
   }, [id]);
   
   const product = products.find(p => p.id === parseInt(id));
@@ -52,9 +52,9 @@ export default function ProductDetailsPage() {
     <div style={{ paddingTop: '100px', paddingBottom: '80px', minHeight: '80vh', backgroundColor: 'var(--color-white)' }}>
       <div className="container">
         
-        {/* Botón Atrás */}
+        {/* Botón Atrás visible sin necesidad de hover */}
         <div style={{ marginBottom: '32px' }}>
-          <Link to="/tienda" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: 'var(--color-gray)', fontWeight: '600', textTransform: 'uppercase', fontSize: '0.9rem', transition: 'color 0.2s' }} onMouseOver={(e) => e.target.style.color = 'var(--color-red)'} onMouseOut={(e) => e.target.style.color = 'var(--color-gray)'}>
+          <Link to="/tienda" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: '#111', fontWeight: 'bold', textTransform: 'uppercase', fontSize: '0.9rem', transition: 'color 0.2s' }} onMouseOver={(e) => e.target.style.color = 'var(--color-red)'} onMouseOut={(e) => e.target.style.color = '#111'}>
             <ArrowLeft size={20} />
             Volver a la Tienda
           </Link>

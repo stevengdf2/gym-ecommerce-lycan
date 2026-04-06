@@ -16,7 +16,12 @@ export default function ProductCard({ product }) {
 
   return (
     <div className="product-card">
-      <Link to={`/producto/${product.id}`} className="product-image-container" style={{ display: 'block' }}>
+      <Link to={`/producto/${product.id}`} className="product-image-container" style={{ display: 'block', position: 'relative' }}>
+        {product.badge && (
+          <span style={{ position: 'absolute', top: '12px', left: '0', backgroundColor: 'var(--color-red)', color: 'white', padding: '6px 14px', fontSize: '0.85rem', fontWeight: '900', textTransform: 'uppercase', zIndex: 10, letterSpacing: '1px', boxShadow: '2px 2px 10px rgba(0,0,0,0.3)' }}>
+            {product.badge}
+          </span>
+        )}
         <img 
           src={product.image} 
           alt={product.name} 

@@ -20,6 +20,7 @@ export default function AdminPage() {
   const [name, setName] = useState('');
   const [category, setCategory] = useState('Equipamiento');
   const [price, setPrice] = useState('');
+  const [badge, setBadge] = useState(''); // NEW
   const [image, setImage] = useState('');
   const [description, setDescription] = useState('');
   const [featuresText, setFeaturesText] = useState('');
@@ -39,6 +40,7 @@ export default function AdminPage() {
     setEditingId(null);
     setName('');
     setPrice('');
+    setBadge(''); // NEW
     setImage('');
     setDescription('');
     setFeaturesText('');
@@ -59,6 +61,7 @@ export default function AdminPage() {
         name: name,
         category: category,
         price: cleanPrice,
+        badge: badge, // NEW
         image: image || "https://via.placeholder.com/600x600?text=Sin+Foto",
         description: description,
         features: featureArray
@@ -83,6 +86,7 @@ export default function AdminPage() {
     setName(prod.name);
     setCategory(prod.category);
     setPrice(prod.price);
+    setBadge(prod.badge || ''); // NEW
     setImage(prod.image);
     setDescription(prod.description);
     setFeaturesText(prod.features ? prod.features.join('; ') : '');
@@ -172,10 +176,13 @@ export default function AdminPage() {
                   <option value="Accesorios">Accesorios</option>
                 </select>
               </div>
+              <div style={{ flex: 1 }}>
+                <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '8px', color: 'var(--color-red)' }}>Insignia Oferta (Opcional)</label>
+                <input type="text" value={badge} onChange={e => setBadge(e.target.value)} style={{ width: '100%', padding: '12px', border: '1px solid var(--color-red)', borderRadius: '4px', backgroundColor: '#fff5f5' }} placeholder="Ej: -20% OFF" />
+              </div>
               <div style={{ flex: 2 }}>
-                <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '8px' }}>Link de la Fotografía *</label>
+                <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '8px' }}>Link Fotografía *</label>
                 <input required type="url" value={image} onChange={e => setImage(e.target.value)} style={{ width: '100%', padding: '12px', border: '1px solid #ccc', borderRadius: '4px' }} placeholder="https://mi-disco/foto.jpg" />
-                <small style={{ color: '#888' }}>*Sube la foto a Facebook o Drive y pega el enlace aquí.</small>
               </div>
             </div>
 
